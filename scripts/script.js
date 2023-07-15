@@ -20,17 +20,17 @@ document.addEventListener('DOMContentLoaded', () => {
 		const listItems = document.querySelector(parentSelector);
 
 		listItems.addEventListener('click', (e) => {
-			if (e.target && e.target.closest(childrenSelector)) {
-				e.preventDefault();
+			e.preventDefault();
+			const parent = e.target.closest(childrenSelector);
 
-				let linkAttr = e.target.getAttribute(searchAttr);
+			if (e.target && parent) {
+				let linkAttr = parent.getAttribute(searchAttr);
 
 				if (linkAttr[0] !== '#') {
 					linkAttr = '#' + linkAttr;
 				}
 
 				const scrollItem = document.querySelector(linkAttr);
-
 				scrollItem.scrollIntoView({
 					behavior: 'smooth'
 				});
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	};
 
-	smoothScrollingToElement('.nav-list', '.nav-item', 'href');
+	smoothScrollingToElement('.nav-list', '.nav-link', 'href');
 	smoothScrollingToElement(
 		'.products-list',
 		'.products-item-info-button',
@@ -69,7 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		let errText = addErrorsClasses(formData, 'form-input-error', e.target);
 
 		if (!errText) {
-			alert('Thanks for order');
+			const alertMessage =
+				'Thanks for order ' +
+				Object.entries(formData)
+					.map((el) => `${el[0]}: ${el[1]}`)
+					.join(', ');
+
+			alert(alertMessage);
 		}
 	});
 
